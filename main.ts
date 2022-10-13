@@ -117,7 +117,7 @@ let right_hand = 0
 let left_hand = 0
 let right_hand_state = 0
 let lefthanded_state = 0
-basic.showIcon(IconNames.Heart)
+basic.showIcon(IconNames.TShirt)
 radio.setGroup(1)
 lefthanded_state = 0
 right_hand_state = 0
