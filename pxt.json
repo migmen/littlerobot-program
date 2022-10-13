@@ -1,0 +1,32 @@
+{
+    "name": "LittleRobot Program",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "UDriver_PCA9685": "github:tinkertanker/udriver_pca9585#v0.0.1",
+        "pca9685": "github:jdarling/pxt-pca9685#3d08a2d73002bf8d3525894bb731bc8fe82f6673",
+        "microphone": "*"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md",
+        "main.py"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "branch": "v2.0.3",
+        "tag": "v2.0.3",
+        "commits": "https://github.com/microsoft/pxt-microbit/commits/20acea2a251df78bdb42ba349f529382275fe1bf",
+        "target": "5.0.12",
+        "pxt": "5.15.10",
+        "targetId": "microbit"
+    },
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
+}
