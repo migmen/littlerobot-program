@@ -40,6 +40,7 @@ function right_foot_back (rfbnum: number) {
     }
 }
 function back (bnum: number) {
+    basic.showNumber(action)
     repeat_back = bnum
     right_foot_back(1)
     for (let index = 0; index < repeat_back; index++) {
@@ -64,7 +65,18 @@ function right_foot_forward (rffnum: number) {
         basic.pause(150)
     }
 }
+function readyforplay () {
+    basic.showNumber(action)
+    PCA9685.setServoPosition(PCA9685.ServoNum.Servo1, right_hand, 64)
+    PCA9685.setServoPosition(PCA9685.ServoNum.Servo2, left_hand, 64)
+    PCA9685.setServoPosition(PCA9685.ServoNum.Servo3, right_leg, 64)
+    PCA9685.setServoPosition(PCA9685.ServoNum.Servo5, right_foot, 64)
+    PCA9685.setServoPosition(PCA9685.ServoNum.Servo4, left_leg, 64)
+    PCA9685.setServoPosition(PCA9685.ServoNum.Servo6, left_foot, 64)
+    basic.pause(200)
+}
 function go_ahead (ganum: number) {
+    basic.showNumber(action)
     repeat_go_ahead = ganum
     for (let index = 0; index < repeat_go_ahead; index++) {
         right_foot_forward(1)
@@ -78,6 +90,10 @@ function go_ahead (ganum: number) {
             `)
     }
 }
+input.onButtonPressed(Button.A, function () {
+    servoNum += 1
+    basic.showNumber(servoNum)
+})
 function left_foot_back (lfbnum: number) {
     repeat_left_foot_back = lfbnum
     for (let index = 0; index < repeat_left_foot_back; index++) {
@@ -108,7 +124,7 @@ function Turn_right (trnum: number) {
         PCA9685.setServoPosition(PCA9685.ServoNum.Servo3, right_leg - 70, 64)
         PCA9685.setServoPosition(PCA9685.ServoNum.Servo4, left_leg - 70, 64)
         basic.pause(150)
-        reset()
+        readyforplay()
         basic.pause(50)
     }
 }
@@ -120,10 +136,18 @@ function Turn_left (tlnum: number) {
         PCA9685.setServoPosition(PCA9685.ServoNum.Servo3, right_leg + 70, 64)
         PCA9685.setServoPosition(PCA9685.ServoNum.Servo4, left_leg + 70, 64)
         basic.pause(150)
-        reset()
+        readyforplay()
         basic.pause(50)
     }
 }
+input.onButtonPressed(Button.AB, function () {
+    radio.sendNumber(servoNum)
+    basic.showNumber(servoNum)
+})
+input.onButtonPressed(Button.B, function () {
+    servoNum += -1
+    basic.showNumber(servoNum)
+})
 function raise_right_hand (rrhnum: number) {
     repeat_right_hand = rrhnum
     for (let index = 0; index < repeat_right_hand; index++) {
@@ -141,7 +165,7 @@ function raise_right_hand (rrhnum: number) {
     }
 }
 function use_all () {
-    reset()
+    readyforplay()
     go_ahead(1)
     raise_left_hand(1)
     raise_right_hand(1)
@@ -154,7 +178,7 @@ function use_all () {
     crossover_right(1)
     crossover_left(1)
     right_foot_back(1)
-    reset()
+    readyforplay()
 }
 function left_foot_forward (lffnum: number) {
     repeat_left_foot_forward = lffnum
@@ -167,37 +191,6 @@ function left_foot_forward (lffnum: number) {
         basic.pause(150)
     }
 }
-function choose_move_action () {
-    basic.showNumber(servoNum)
-    loop = true
-    while (loop) {
-        if (input.buttonIsPressed(Button.AB)) {
-            radio.sendNumber(servoNum)
-        } else if (input.buttonIsPressed(Button.A)) {
-            adjNum += 1
-            adjNum = servoNum
-            basic.showNumber(servoNum)
-        } else if (input.buttonIsPressed(Button.B)) {
-            adjNum += -1
-            adjNum = servoNum
-            basic.showNumber(servoNum)
-        } else if (servoNum > 8) {
-            basic.showIcon(IconNames.Sad)
-            basic.pause(2000)
-            loop = false
-        }
-    }
-}
-function reset () {
-    PCA9685.setServoPosition(PCA9685.ServoNum.Servo1, right_hand, 64)
-    PCA9685.setServoPosition(PCA9685.ServoNum.Servo2, left_hand, 64)
-    PCA9685.setServoPosition(PCA9685.ServoNum.Servo3, right_leg, 64)
-    PCA9685.setServoPosition(PCA9685.ServoNum.Servo5, right_foot, 64)
-    PCA9685.setServoPosition(PCA9685.ServoNum.Servo4, left_leg, 64)
-    PCA9685.setServoPosition(PCA9685.ServoNum.Servo6, left_foot, 64)
-    basic.pause(100)
-}
-let loop = false
 let repeat_left_foot_forward = 0
 let repeat_right_hand = 0
 let repeat_turn_left = 0
@@ -220,10 +213,9 @@ let left_hand = 0
 let right_hand_state = 0
 let lefthanded_state = 0
 let servoNum = 0
-let adjNum = 0
-basic.showIcon(IconNames.TShirt)
+basic.showIcon(IconNames.Happy)
 radio.setGroup(1)
-adjNum = 0
+let adjNum = 0
 servoNum = 0
 lefthanded_state = 0
 right_hand_state = 0
@@ -234,15 +226,8 @@ right_foot = 90
 left_leg = 90
 left_foot = 90
 action = 0
-PCA9685.setServoPosition(PCA9685.ServoNum.Servo1, right_hand, 64)
-PCA9685.setServoPosition(PCA9685.ServoNum.Servo2, left_hand, 64)
-PCA9685.setServoPosition(PCA9685.ServoNum.Servo3, right_leg, 64)
-PCA9685.setServoPosition(PCA9685.ServoNum.Servo4, left_leg, 64)
-PCA9685.setServoPosition(PCA9685.ServoNum.Servo5, right_foot, 64)
-PCA9685.setServoPosition(PCA9685.ServoNum.Servo6, left_foot, 64)
 basic.pause(2000)
 basic.forever(function () {
-    choose_move_action()
     if (action == 1) {
         go_ahead(1)
     } else if (action == 2) {
@@ -251,8 +236,6 @@ basic.forever(function () {
         Turn_left(1)
     } else if (action == 4) {
         Turn_right(1)
-    } else if (action == 0) {
-        reset()
     } else if (action == 5) {
         crossover_left(1)
     } else if (action == 6) {
@@ -262,6 +245,6 @@ basic.forever(function () {
     } else if (action == 8) {
         raise_right_hand(1)
     } else if (action == 9) {
-    	
+        use_all()
     }
 })
